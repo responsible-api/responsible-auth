@@ -1,0 +1,43 @@
+services:
+
+  api:
+    container_name: responsible-api
+    env_file: .env
+    build:
+      context: .
+      dockerfile: dev.Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    command: [ "sh", "-c", "/myapp/bin/api" ]
+    ports:
+      - "7489:7489"
+    volumes:
+      - .:/responsible-api-go
+    restart: always
+  
+  db:
+    image: mysql:8.0.37
+    platform: linux/arm64
+    container_name: responsible-api-db
+    volumes:
+      - ./migration/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    ports:
+      - "3399:3306"
+    expose:
+      - "3399"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 3s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+volumes:
+  db:
