@@ -37,15 +37,9 @@ func ValidateToken(tokenString string, options concerns.Options) (*jwt.Token, er
 }
 
 func validExpiry(claims *concerns.Claims) bool {
-	if claims.ExpiresAt != nil || claims.ExpiresAt.Time.Before(time.Now()) {
-		return true
-	}
-	return false
+	return !(claims.ExpiresAt == nil || claims.ExpiresAt.Time.Before(time.Now()))
 }
 
 func validNotBefore(claims *concerns.Claims) bool {
-	if claims.NotBefore != nil || claims.NotBefore.Time.After(time.Now()) {
-		return true
-	}
-	return false
+	return !(claims.NotBefore == nil || claims.NotBefore.Time.After(time.Now()))
 }

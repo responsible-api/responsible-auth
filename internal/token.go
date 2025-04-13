@@ -65,7 +65,6 @@ func setIssuedAt(issuedAt int64) time.Time {
 // Otherwise, it sets the expiration time to the current time plus the requested duration.
 // Options.TokenDuration time.Duration
 func setExpiresAt(expiresAtDuration time.Duration) time.Time {
-	fmt.Println("ExpiresAtDuration:", expiresAtDuration)
 	if expiresAtDuration == 0 {
 		// Default to 15 minutes if not set
 		return time.Now().Add(15 * time.Minute)

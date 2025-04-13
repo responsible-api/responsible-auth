@@ -8,7 +8,7 @@ import (
 
 type Options struct {
 	// Required fields
-	SecretKey            string `json:"required"`
+	SecretKey            string
 	TokenDuration        time.Duration
 	RefreshTokenDuration time.Duration
 	TokenLeeway          time.Duration
