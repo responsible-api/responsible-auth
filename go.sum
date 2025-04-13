@@ -1,2 +1,4 @@
+github.com/golang-jwt/jwt/v5 v5.2.2 h1:Rl4B7itRWVtYIHFrSNd7vhTiz9UpLdi6gZhZ3wEeDy8=
+github.com/golang-jwt/jwt/v5 v5.2.2/go.mod h1:pqrtFR0X4osieyHYxtmOUWsAWrfe1Q5UVIyoH402zdk=
 github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd h1:nIzoSW6OhhppWLm4yqBwZsKJlAayUu5FGozhrF3ETSM=
 github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd/go.mod h1:MEQrHur0g8VplbLOv5vXmDzacSaH9Z7XhcgsSh1xciU=
