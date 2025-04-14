@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func GenerateToken(userID string, hash string, options concerns.Options) (string, error) {
+func Grant(userID string, hash string, options concerns.Options) (string, error) {
 	if (options.SecretKey == "") || (options.SecretKey == "required") {
 		return "", fmt.Errorf("secret key is required")
 	}

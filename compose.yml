@@ -11,7 +11,7 @@ services:
         condition: service_healthy
     command: [ "sh", "-c", "/myapp/bin/api" ]
     ports:
-      - "7489:7489"
+      - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
       - .:/responsible-api-go
     restart: always
@@ -21,17 +21,19 @@ services:
     platform: linux/arm64
     container_name: responsible-api-db
     volumes:
-      - ./migration/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+      - ./migration/schema.sql:/docker-entrypoint-initdb.d/schema.sql/:rw
       - db:/var/lib/mysql
+    command: >
+      --sql-mode=NO_ENGINE_SUBSTITUTION
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
     ports:
-      - "3399:3306"
+      - ${DB_PORT}:3306
     expose:
-      - "3399"
+      - ${DB_PORT}
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 3s

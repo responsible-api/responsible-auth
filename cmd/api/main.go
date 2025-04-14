@@ -30,7 +30,7 @@ func main() {
 	hash := "user-specific-hash"
 
 	// Generate a token for the user
-	token, err := authService.GenerateToken(userID, hash)
+	token, err := authService.GrantToken(userID, hash)
 	if err != nil {
 		log.Fatalf("Failed to generate token: %v", err)
 	}

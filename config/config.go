@@ -21,11 +21,11 @@ type ConfServer struct {
 }
 
 type ConfDB struct {
-	Host     string `env:"DB_HOST,default=db_mysql"`
+	Host     string `env:"DB_HOST,default=responsible-api-db"`
 	Port     int    `env:"DB_PORT,default=3306"`
 	Username string `env:"DB_USER,default=responsible_api_user"`
 	Password string `env:"DB_PASS,default=responsible_api_pass"`
-	DBName   string `env:"DB_NAME,default=responsible_api_db"`
+	DBName   string `env:"DB_NAME,default=responsible_api"`
 	Debug    bool   `env:"DB_DEBUG,default=false"`
 }
 

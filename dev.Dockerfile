@@ -9,4 +9,4 @@ WORKDIR /responsible-api-go
 RUN go install -mod=mod github.com/githubnemo/CompileDaemon
 ENTRYPOINT ["CompileDaemon", "--build=go build -o ./bin/api ./cmd/api", "--command=./bin/api", "--polling"]
 
-EXPOSE 7489
+EXPOSE 8080

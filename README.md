@@ -5,3 +5,7 @@
 - API
     - Development environment
     - docker build -f dev.Dockerfile . -t responsibleapi
+    - ssh into the app container
+        - docker exec -i -t responsible-api sh
+    - ssh into the Mysql container
+        - docker exec -i -t responsible-api-db sh

@@ -8,7 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func ValidateToken(tokenString string, options concerns.Options) (*jwt.Token, error) {
+func Validate(tokenString string, options concerns.Options) (*jwt.Token, error) {
 	token, err := jwt.ParseWithClaims(tokenString, &concerns.Claims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return token, nil

@@ -19,8 +19,8 @@ type AuthWrapper struct {
 	Auth *concerns.Auth
 }
 
-func (a *AuthWrapper) GenerateToken(userID string, Hash string) (string, error) {
-	tokenString, err := internal.GenerateToken(userID, Hash, a.Auth.Options)
+func (a *AuthWrapper) GrantToken(userID string, Hash string) (string, error) {
+	tokenString, err := internal.Grant(userID, Hash, a.Auth.Options)
 	if err != nil {
 		return "", err
 	}
@@ -28,7 +28,7 @@ func (a *AuthWrapper) GenerateToken(userID string, Hash string) (string, error) 
 }
 
 func (a *AuthWrapper) ValidateToken(tokenString string) (*jwt.Token, error) {
-	token, err := internal.ValidateToken(tokenString, a.Auth.Options)
+	token, err := internal.Validate(tokenString, a.Auth.Options)
 	if err != nil {
 		return nil, err
 	}
