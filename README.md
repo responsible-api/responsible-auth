@@ -1,6 +1,7 @@
 # ResponsibleAPI-Go
 
-## This is a personal project do not use it in production
+## This is a personal project in the making.
+## Do not use it in production
 
 - API
     - Development environment
