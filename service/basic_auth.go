@@ -4,11 +4,12 @@ import (
 	"encoding/base64"
 	"errors"
 	"fmt"
-	auth "responsible-api-go"
-	"responsible-api-go/internal"
-	"responsible-api-go/resource/user"
-	"responsible-api-go/tools"
 	"strings"
+
+	auth "github.com/vince-scarpa/responsible-api-go"
+	"github.com/vince-scarpa/responsible-api-go/internal"
+	"github.com/vince-scarpa/responsible-api-go/resource/user"
+	"github.com/vince-scarpa/responsible-api-go/tools"
 
 	"github.com/golang-jwt/jwt/v5"
 )

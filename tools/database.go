@@ -5,8 +5,9 @@ import (
 	"log"
 	"os"
 	"os/signal"
-	"responsible-api-go/config"
 	"syscall"
+
+	"github.com/vince-scarpa/responsible-api-go/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

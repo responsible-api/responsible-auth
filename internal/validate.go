@@ -2,9 +2,10 @@ package internal
 
 import (
 	"fmt"
-	auth "responsible-api-go"
-	"responsible-api-go/concerns"
 	"time"
+
+	auth "github.com/vince-scarpa/responsible-api-go"
+	"github.com/vince-scarpa/responsible-api-go/concerns"
 
 	"github.com/golang-jwt/jwt/v5"
 )

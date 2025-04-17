@@ -1,4 +1,4 @@
-module responsible-api-go
+module github.com/vince-scarpa/responsible-api-go
 
 go 1.23.4
 
