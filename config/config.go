@@ -21,7 +21,7 @@ type ConfServer struct {
 }
 
 type ConfDB struct {
-	Host     string `env:"DB_HOST,default=responsible-api-db"`
+	Host     string `env:"DB_HOST,default=127.0.0.1"`
 	Port     int    `env:"DB_PORT,default=3306"`
 	Username string `env:"DB_USER,default=responsible_api_user"`
 	Password string `env:"DB_PASS,default=responsible_api_pass"`
@@ -29,7 +29,7 @@ type ConfDB struct {
 	Debug    bool   `env:"DB_DEBUG,default=false"`
 }
 
-func New() *Conf {
+func Config() *Conf {
 	var c Conf
 	if err := envdecode.StrictDecode(&c); err != nil {
 		log.Fatalf("Failed to decode: %s", err)
@@ -38,7 +38,7 @@ func New() *Conf {
 	return &c
 }
 
-func NewDB() *ConfDB {
+func ConfigDB() *ConfDB {
 	var c ConfDB
 	if err := envdecode.StrictDecode(&c); err != nil {
 		log.Fatalf("Failed to decode: %s", err)

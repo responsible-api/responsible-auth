@@ -1,43 +1,20 @@
 package concerns
 
 import (
-	"time"
-
 	"github.com/golang-jwt/jwt/v5"
+	"gorm.io/gorm"
 )
 
-type Options struct {
-	// Required fields
-	SecretKey            string
-	TokenDuration        time.Duration
-	RefreshTokenDuration time.Duration
-	TokenLeeway          time.Duration
-	CookieDuration       time.Duration
-
-	// Optional fields
-	Issuer    string `json:"issuer,omitempty"`
-	IssuedAt  int64  `json:"issued_at,omitempty"`
-	NotBefore int64  `json:"not_before,omitempty"`
-	Subject   string `json:"subject,omitempty"`
-	Scopes    string `json:"scopes,omitempty"`
-	Role      string `json:"role,omitempty"`
+type Repository struct {
+	DB *gorm.DB
 }
 
-type Auth struct {
-	Options Options
-}
-
-type AuthInterface interface {
-	GenerateToken(userID string, Hash string) (string, error)
-	ValidateToken(token string) (*Claims, error)
-}
-
-type Claims struct {
+type ClaimsGeneric struct {
 	jwt.RegisteredClaims
-	User *User `json:"user"`
+	User *ClaimsUser `json:"user"`
 }
 
-type User struct {
+type ClaimsUser struct {
 	ID       string `json:"id"`
 	Name     string `json:"name,omitempty"`
 	Role     string `json:"role,omitempty"`

@@ -2,13 +2,14 @@ package internal
 
 import (
 	"fmt"
+	auth "responsible-api-go"
 	"responsible-api-go/concerns"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func Grant(userID string, hash string, options concerns.Options) (string, error) {
+func Grant(userID string, hash string, options auth.AuthOptions) (string, error) {
 	if (options.SecretKey == "") || (options.SecretKey == "required") {
 		return "", fmt.Errorf("secret key is required")
 	}
@@ -16,14 +17,14 @@ func Grant(userID string, hash string, options concerns.Options) (string, error)
 	// Generate a JWT token by the user ID / username and hash / password
 	// Set the expiration time to the specified duration
 	// Return the generated token or an error if something goes wrong
-	claims := &concerns.Claims{
+	claims := &concerns.ClaimsGeneric{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    setIssuer(options.Issuer),
 			IssuedAt:  jwt.NewNumericDate(setIssuedAt(options.IssuedAt)),
 			ExpiresAt: jwt.NewNumericDate(setExpiresAt(options.TokenDuration)),
 			NotBefore: jwt.NewNumericDate(setNotBefore(options.NotBefore)),
 		},
-		User: &concerns.User{
+		User: &concerns.ClaimsUser{
 			ID: userID,
 		},
 	}

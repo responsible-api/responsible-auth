@@ -9,7 +9,7 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: [ "sh", "-c", "/myapp/bin/api" ]
+    command: [ "sh", "-c", "/responsible-api-go/bin/api" ]
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
@@ -31,9 +31,9 @@ services:
       MYSQL_USER: ${DB_USER}
       MYSQL_PASSWORD: ${DB_PASS}
     ports:
-      - ${DB_PORT}:3306
+      - "3309:3306"
     expose:
-      - ${DB_PORT}
+      - "3309"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 3s

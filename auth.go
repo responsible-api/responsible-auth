@@ -1,36 +1,56 @@
 package auth
 
 import (
-	"responsible-api-go/concerns"
-	"responsible-api-go/internal"
+	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func NewAuth(options concerns.Options) *AuthWrapper {
-	return &AuthWrapper{
-		Auth: &concerns.Auth{
-			Options: options,
-		},
-	}
-}
-
 type AuthWrapper struct {
-	Auth *concerns.Auth
+	Provider AuthInterface
+	Options  AuthOptions
+}
+type AuthOptions struct {
+	// Required fields
+	SecretKey            string
+	TokenDuration        time.Duration
+	RefreshTokenDuration time.Duration
+	TokenLeeway          time.Duration
+	CookieDuration       time.Duration
+
+	// Optional fields
+	Issuer    string `json:"issuer,omitempty"`
+	IssuedAt  int64  `json:"issued_at,omitempty"`
+	NotBefore int64  `json:"not_before,omitempty"`
+	Subject   string `json:"subject,omitempty"`
+	Scopes    string `json:"scopes,omitempty"`
+	Role      string `json:"role,omitempty"`
 }
 
-func (a *AuthWrapper) GrantToken(userID string, Hash string) (string, error) {
-	tokenString, err := internal.Grant(userID, Hash, a.Auth.Options)
-	if err != nil {
-		return "", err
-	}
-	return tokenString, nil
+type AuthInterface interface {
+	Options() AuthOptions
+	SetOptions(options AuthOptions)
+	Decode(hash string) (string, string, error)
+	Grant(ID string, hash string) (string, error)
+	Validate(tokenString string) (*jwt.Token, error)
 }
 
-func (a *AuthWrapper) ValidateToken(tokenString string) (*jwt.Token, error) {
-	token, err := internal.Validate(tokenString, a.Auth.Options)
-	if err != nil {
-		return nil, err
-	}
-	return token, nil
+type AuthProvider struct {
+	AuthInterface
 }
+
+func NewAuth(authProvider AuthInterface, options AuthOptions) *AuthWrapper {
+	authProvider.SetOptions(options)
+	return &AuthWrapper{
+		Provider: authProvider,
+		Options:  options,
+	}
+}
+
+// func (a *AuthWrapper) ValidateToken(tokenString string) (*jwt.Token, error) {
+// 	token, err := internal.Validate(tokenString, a.Auth.Options)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return token, nil
+// }
