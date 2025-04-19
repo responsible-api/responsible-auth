@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	auth "github.com/vince-scarpa/responsible-api-go"
+	"github.com/vince-scarpa/responsible-api-go/auth"
 	"github.com/vince-scarpa/responsible-api-go/internal"
 	"github.com/vince-scarpa/responsible-api-go/resource/user"
 	"github.com/vince-scarpa/responsible-api-go/tools"

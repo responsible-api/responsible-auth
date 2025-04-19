@@ -46,11 +46,3 @@ func NewAuth(authProvider AuthInterface, options AuthOptions) *AuthWrapper {
 		Options:  options,
 	}
 }
-
-// func (a *AuthWrapper) ValidateToken(tokenString string) (*jwt.Token, error) {
-// 	token, err := internal.Validate(tokenString, a.Auth.Options)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return token, nil
-// }
