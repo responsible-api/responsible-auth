@@ -51,7 +51,7 @@ func (a *BasicAuth) Grant(userID string, hash string) (string, error) {
 	}
 
 	userRepo := user.NewRepository(db)
-	user, err := userRepo.Read(userID)
+	user, err := userRepo.Read(userID, hash)
 	if err != nil {
 		return "", err
 	}

@@ -18,11 +18,13 @@ func NewRepository(db *gorm.DB) *Repository {
 	}
 }
 
-func (r *Repository) Read(username string) (*User, error) {
+func (r *Repository) Read(username string, hash string) (*User, error) {
 	user := &User{}
+	// SELECT * FROM responsible_api_users WHERE(mail = ? OR account_id = ?) AND secret = ?
 	query := r.db.Table("responsible_api_users").
-		Where("mail = ?", username).
-		Or("account_id = ?", username)
+		Where(r.db.Where("mail = ?", username).Or("account_id = ?", username)).
+		Where("secret = ?", hash).
+		Limit(1)
 
 	if err := query.First(&user).Error; err != nil {
 		return nil, err

@@ -6,7 +6,7 @@ FLUSH PRIVILEGES;
 USE responsible_api;
 
 -- Create syntax for TABLE 'responsible_api_users'
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
   `responsible_api_users` (
     `uid` int unsigned NOT NULL AUTO_INCREMENT,
     `account_id` bigint NOT NULL DEFAULT '0',
@@ -27,7 +27,7 @@ CREATE TABLE
   ) ENGINE = InnoDB;
 
 -- Create syntax for TABLE 'responsible_token_bucket'
-CREATE TABLE
+CREATE TABLE IF NOT EXISTS
   `responsible_token_bucket` (
     `id` int unsigned NOT NULL AUTO_INCREMENT,
     `bucket` varchar(128) NOT NULL DEFAULT '',

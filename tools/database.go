@@ -11,6 +11,7 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 const fmtMysqlDBString = "%s:%s@tcp(%s:%d)/%s"
@@ -26,9 +27,15 @@ func NewDatabase() (*gorm.DB, error) {
 
 func DBCon() (*gorm.DB, error) {
 	c := config.ConfigDB()
+	l := logger.Default.LogMode(logger.Silent)
+	if c.Debug {
+		l = logger.Default.LogMode(logger.Info)
+	}
 
 	dsn := fmt.Sprintf(fmtMysqlDBString, c.Username, c.Password, c.Host, c.Port, c.DBName)
-	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
+		Logger: l,
+	})
 	if err != nil {
 		log.Fatalf("DB connection start failure error")
 		return nil, err
