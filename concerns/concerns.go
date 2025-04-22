@@ -11,13 +11,7 @@ type Repository struct {
 
 type ClaimsGeneric struct {
 	jwt.RegisteredClaims
-	User *ClaimsUser `json:"user"`
+	CustomClaims map[string]interface{} `json:"custom,omitempty"`
 }
 
-type ClaimsUser struct {
-	ID       string `json:"id"`
-	Name     string `json:"name,omitempty"`
-	Role     string `json:"role,omitempty"`
-	Audience string `json:"audience,omitempty"`
-	Scopes   string `json:"scopes,omitempty"`
-}
+type CustomClaims struct{}

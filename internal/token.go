@@ -26,9 +26,8 @@ func Grant(userID string, hash string, options auth.AuthOptions) (string, error)
 			ExpiresAt: jwt.NewNumericDate(setExpiresAt(options.TokenDuration)),
 			NotBefore: jwt.NewNumericDate(setNotBefore(options.NotBefore)),
 		},
-		User: &concerns.ClaimsUser{
-			ID: userID,
-		},
+		// Custom claims can be added here
+		CustomClaims: options.CustomClaims,
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)

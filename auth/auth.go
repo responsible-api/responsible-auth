@@ -25,6 +25,9 @@ type AuthOptions struct {
 	Subject   string `json:"subject,omitempty"`
 	Scopes    string `json:"scopes,omitempty"`
 	Role      string `json:"role,omitempty"`
+
+	// Custom claims
+	CustomClaims map[string]interface{} `json:"custom_claims,omitempty"`
 }
 
 type AuthInterface interface {
