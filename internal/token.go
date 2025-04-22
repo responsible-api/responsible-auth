@@ -21,6 +21,7 @@ func Grant(userID string, hash string, options auth.AuthOptions) (string, error)
 	claims := &concerns.ClaimsGeneric{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    setIssuer(options.Issuer),
+			Subject:   setSubject(options.Subject),
 			IssuedAt:  jwt.NewNumericDate(setIssuedAt(options.IssuedAt)),
 			ExpiresAt: jwt.NewNumericDate(setExpiresAt(options.TokenDuration)),
 			NotBefore: jwt.NewNumericDate(setNotBefore(options.NotBefore)),
@@ -84,4 +85,15 @@ func setNotBefore(notBefore int64) time.Time {
 		return time.Now()
 	}
 	return time.Unix(int64(notBefore), 0)
+}
+
+// setSubject sets the subject for the token.
+// If subject in the option is empty or doesn't exist, then default to nil.
+// Otherwise, it sets the subject to the requested value.
+// Options.Subject string `json:"subject,omitempty"`
+func setSubject(subject string) string {
+	if subject == "" {
+		return ""
+	}
+	return subject
 }
