@@ -64,6 +64,15 @@ func (a *BasicAuth) Grant(userID string, hash string) (string, error) {
 	return tokenString, nil
 }
 
+// RefreshToken generates a refresh token for the user with the given ID.
+func (a *BasicAuth) RefreshToken(userID string) (string, error) {
+	refreshToken, err := internal.RefreshToken(userID, Options)
+	if err != nil {
+		return "", err
+	}
+	return refreshToken, nil
+}
+
 func (a *BasicAuth) Validate(tokenString string) (*jwt.Token, error) {
 	token, err := internal.Validate(tokenString, Options)
 	if err != nil {

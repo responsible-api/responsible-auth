@@ -13,5 +13,3 @@ type ClaimsGeneric struct {
 	jwt.RegisteredClaims
 	CustomClaims map[string]interface{} `json:"custom,omitempty"`
 }
-
-type CustomClaims struct{}

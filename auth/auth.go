@@ -35,6 +35,7 @@ type AuthInterface interface {
 	SetOptions(options AuthOptions)
 	Decode(hash string) (string, string, error)
 	Grant(ID string, hash string) (string, error)
+	RefreshToken(ID string) (string, error)
 	Validate(tokenString string) (*jwt.Token, error)
 }
 

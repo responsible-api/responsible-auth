@@ -39,6 +39,21 @@ func Grant(userID string, hash string, options auth.AuthOptions) (string, error)
 	return tokenString, nil
 }
 
+func RefreshToken(username string, options auth.AuthOptions) (string, error) {
+	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"username": username,
+		"exp":      time.Now().Add(options.RefreshTokenDuration).Unix(),
+	})
+
+	refreshTokenString, err := refreshToken.SignedString([]byte(options.SecretKey))
+	if err != nil {
+		return "", err
+	}
+
+	// Return the refresh token string
+	return refreshTokenString, nil
+}
+
 // setIssuer sets the issuer for the token.
 // If issuer in the option is empty or doesn't exist, then default to "default-issuer".
 // Otherwise, it sets the issuer to the requested value.
