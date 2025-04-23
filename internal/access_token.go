@@ -6,12 +6,12 @@ import (
 
 	"github.com/vince-scarpa/responsible-api-go/auth"
 	"github.com/vince-scarpa/responsible-api-go/concerns"
-	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
+	"github.com/vince-scarpa/responsible-api-go/resource/access"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func CreateAccessToken(options auth.AuthOptions) (*rtoken.RToken, error) {
+func CreateAccessToken(options auth.AuthOptions) (*access.RToken, error) {
 	if (options.SecretKey == "") || (options.SecretKey == "required") {
 		return nil, fmt.Errorf("secret key is required")
 	}
@@ -41,7 +41,7 @@ func CreateAccessToken(options auth.AuthOptions) (*rtoken.RToken, error) {
 
 	// Set the raw token string to the JWT token from the signed process
 	jwtToken.Raw = tokenString
-	return rtoken.NewToken(jwtToken), nil
+	return access.NewToken(jwtToken), nil
 }
 
 // setIssuer sets the issuer for the token.

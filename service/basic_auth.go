@@ -8,7 +8,7 @@ import (
 
 	"github.com/vince-scarpa/responsible-api-go/auth"
 	"github.com/vince-scarpa/responsible-api-go/internal"
-	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
+	"github.com/vince-scarpa/responsible-api-go/resource/access"
 	"github.com/vince-scarpa/responsible-api-go/resource/user"
 	"github.com/vince-scarpa/responsible-api-go/tools"
 
@@ -45,7 +45,7 @@ func (d *BasicAuth) Decode(hash string) (string, string, error) {
 }
 
 // Grant generates a token for the user with the given ID and password.
-func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*rtoken.RToken, error) {
+func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToken, error) {
 	db, err := tools.NewDatabase()
 	if err != nil {
 		return nil, err
@@ -65,7 +65,7 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*rtoken.RToke
 	return token, nil
 }
 
-func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*rtoken.RToken, error) {
+func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
 	db, err := tools.NewDatabase()
 	if err != nil {
 		return nil, err
@@ -84,7 +84,7 @@ func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*rtoken.RTok
 	return refreshToken, nil
 }
 
-func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*rtoken.RToken, error) {
+func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken, error) {
 	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
 	if err != nil {
 		return nil, err

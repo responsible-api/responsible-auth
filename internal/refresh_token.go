@@ -7,12 +7,12 @@ import (
 	"time"
 
 	"github.com/vince-scarpa/responsible-api-go/auth"
-	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
+	"github.com/vince-scarpa/responsible-api-go/resource/access"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func CreateRefreshToken(username string, options auth.AuthOptions) (*rtoken.RToken, error) {
+func CreateRefreshToken(username string, options auth.AuthOptions) (*access.RToken, error) {
 	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"username": username,
 		"exp":      time.Now().Add(options.RefreshTokenDuration).Unix(),
@@ -26,10 +26,10 @@ func CreateRefreshToken(username string, options auth.AuthOptions) (*rtoken.RTok
 	// Set the raw token string to the JWT token from the signed process
 	refreshToken.Raw = tokenString
 	// Return the refresh token string
-	return rtoken.NewToken(refreshToken), nil
+	return access.NewToken(refreshToken), nil
 }
 
-func GrantRefreshToken(refreshTokenString string, options auth.AuthOptions) (*rtoken.RToken, error) {
+func GrantRefreshToken(refreshTokenString string, options auth.AuthOptions) (*access.RToken, error) {
 	// Parse and verify the requested refresh token to grant a new access token
 	refreshToken, err := jwt.Parse(refreshTokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {

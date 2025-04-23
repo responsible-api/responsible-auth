@@ -1,4 +1,4 @@
-package rtoken
+package access
 
 import (
 	"fmt"

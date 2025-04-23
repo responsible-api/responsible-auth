@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
+	"github.com/vince-scarpa/responsible-api-go/resource/access"
 )
 
 type AuthWrapper struct {
@@ -35,9 +35,9 @@ type AuthInterface interface {
 	Options() AuthOptions
 	SetOptions(options AuthOptions)
 	Decode(hash string) (string, string, error)
-	CreateAccessToken(userID string, hash string) (*rtoken.RToken, error)
-	CreateRefreshToken(userID string, hash string) (*rtoken.RToken, error)
-	GrantRefreshToken(refreshTokenString string) (*rtoken.RToken, error)
+	CreateAccessToken(userID string, hash string) (*access.RToken, error)
+	CreateRefreshToken(userID string, hash string) (*access.RToken, error)
+	GrantRefreshToken(refreshTokenString string) (*access.RToken, error)
 	Validate(tokenString string) (*jwt.Token, error)
 }
 
