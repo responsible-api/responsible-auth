@@ -12,4 +12,6 @@ type Repository struct {
 type ClaimsGeneric struct {
 	jwt.RegisteredClaims
 	CustomClaims map[string]interface{} `json:"custom,omitempty"`
+	Role         string                 `json:"role,omitempty"`
+	Scopes       string                 `json:"scopes,omitempty"`
 }

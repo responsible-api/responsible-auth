@@ -44,7 +44,7 @@ func (d *BasicAuth) Decode(hash string) (string, string, error) {
 }
 
 // Grant generates a token for the user with the given ID and password.
-func (a *BasicAuth) Grant(userID string, hash string) (string, error) {
+func (a *BasicAuth) CreateAccessToken(userID string, hash string) (string, error) {
 	db, err := tools.NewDatabase()
 	if err != nil {
 		return "", err
@@ -57,16 +57,34 @@ func (a *BasicAuth) Grant(userID string, hash string) (string, error) {
 	}
 	fmt.Println("User found:", user)
 
-	tokenString, err := internal.Grant(userID, hash, Options)
+	tokenString, err := internal.CreateAccessToken(Options)
 	if err != nil {
 		return "", err
 	}
 	return tokenString, nil
 }
 
-// RefreshToken generates a refresh token for the user with the given ID.
-func (a *BasicAuth) RefreshToken(userID string) (string, error) {
-	refreshToken, err := internal.RefreshToken(userID, Options)
+func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (string, error) {
+	db, err := tools.NewDatabase()
+	if err != nil {
+		return "", err
+	}
+
+	userRepo := user.NewRepository(db)
+	user, err := userRepo.Read(userID, hash)
+	if err != nil {
+		return "", err
+	}
+
+	refreshToken, err := internal.CreateRefreshToken(user.Name, Options)
+	if err != nil {
+		return "", err
+	}
+	return refreshToken, nil
+}
+
+func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (string, error) {
+	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
 	if err != nil {
 		return "", err
 	}
