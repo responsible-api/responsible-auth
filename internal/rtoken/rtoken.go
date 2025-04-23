@@ -18,7 +18,7 @@ func NewToken(token *jwt.Token) *RToken {
 }
 
 func (r *RToken) GetToken() string {
-	return r.Raw
+	return r.Token.Raw
 }
 
 func (r *RToken) GetExpirationTime() (*jwt.NumericDate, error) {
