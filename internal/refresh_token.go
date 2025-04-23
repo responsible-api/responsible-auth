@@ -18,11 +18,13 @@ func CreateRefreshToken(username string, options auth.AuthOptions) (*rtoken.RTok
 		"exp":      time.Now().Add(options.RefreshTokenDuration).Unix(),
 	})
 
-	_, err := refreshToken.SignedString([]byte(options.SecretKey))
+	tokenString, err := refreshToken.SignedString([]byte(options.SecretKey))
 	if err != nil {
 		return nil, err
 	}
 
+	// Set the raw token string to the JWT token from the signed process
+	refreshToken.Raw = tokenString
 	// Return the refresh token string
 	return rtoken.NewToken(refreshToken), nil
 }

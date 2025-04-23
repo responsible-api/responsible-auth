@@ -34,10 +34,13 @@ func CreateAccessToken(options auth.AuthOptions) (*rtoken.RToken, error) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	_, err := jwtToken.SignedString([]byte(options.SecretKey))
+	tokenString, err := jwtToken.SignedString([]byte(options.SecretKey))
 	if err != nil {
 		return nil, err
 	}
+
+	// Set the raw token string to the JWT token from the signed process
+	jwtToken.Raw = tokenString
 	return rtoken.NewToken(jwtToken), nil
 }
 
