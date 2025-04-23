@@ -2,19 +2,18 @@ package internal
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"time"
 
 	"github.com/vince-scarpa/responsible-api-go/auth"
 	"github.com/vince-scarpa/responsible-api-go/concerns"
+	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-func CreateAccessToken(options auth.AuthOptions) (string, error) {
+func CreateAccessToken(options auth.AuthOptions) (*rtoken.RToken, error) {
 	if (options.SecretKey == "") || (options.SecretKey == "required") {
-		return "", fmt.Errorf("secret key is required")
+		return nil, fmt.Errorf("secret key is required")
 	}
 
 	// Generate a JWT token via the supplied options set
@@ -34,55 +33,12 @@ func CreateAccessToken(options auth.AuthOptions) (string, error) {
 		CustomClaims: options.CustomClaims,
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := token.SignedString([]byte(options.SecretKey))
+	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+	_, err := jwtToken.SignedString([]byte(options.SecretKey))
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-
-	return tokenString, nil
-}
-
-func CreateRefreshToken(username string, options auth.AuthOptions) (string, error) {
-	refreshToken := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"username": username,
-		"exp":      time.Now().Add(options.RefreshTokenDuration).Unix(),
-	})
-
-	refreshTokenString, err := refreshToken.SignedString([]byte(options.SecretKey))
-	if err != nil {
-		return "", err
-	}
-
-	// Return the refresh token string
-	return refreshTokenString, nil
-}
-
-func GrantRefreshToken(refreshTokenString string, options auth.AuthOptions) (string, error) {
-	// Parse and verify the requested refresh token to grant a new access token
-	refreshToken, err := jwt.Parse(refreshTokenString, func(token *jwt.Token) (interface{}, error) {
-		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, http.ErrAbortHandler
-		}
-		return []byte(options.SecretKey), nil
-	})
-
-	if err != nil || !refreshToken.Valid {
-		log.Println("Error parsing refresh token:", err)
-		return "", fmt.Errorf("invalid refresh token")
-	}
-
-	// Generate a new access token if refresh token is valid
-	if _, ok := refreshToken.Claims.(jwt.MapClaims); ok && refreshToken.Valid {
-		newAccessToken, err := CreateAccessToken(options)
-		if err != nil {
-			return "", err
-		}
-		return newAccessToken, nil
-	}
-
-	// If the refresh token is not valid, return an error
-	return "", fmt.Errorf("invalid refresh token")
+	return rtoken.NewToken(jwtToken), nil
 }
 
 // setIssuer sets the issuer for the token.

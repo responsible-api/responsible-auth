@@ -8,6 +8,7 @@ import (
 
 	"github.com/vince-scarpa/responsible-api-go/auth"
 	"github.com/vince-scarpa/responsible-api-go/internal"
+	"github.com/vince-scarpa/responsible-api-go/internal/rtoken"
 	"github.com/vince-scarpa/responsible-api-go/resource/user"
 	"github.com/vince-scarpa/responsible-api-go/tools"
 
@@ -44,49 +45,49 @@ func (d *BasicAuth) Decode(hash string) (string, string, error) {
 }
 
 // Grant generates a token for the user with the given ID and password.
-func (a *BasicAuth) CreateAccessToken(userID string, hash string) (string, error) {
+func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*rtoken.RToken, error) {
 	db, err := tools.NewDatabase()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	userRepo := user.NewRepository(db)
 	user, err := userRepo.Read(userID, hash)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	fmt.Println("User found:", user)
 
-	tokenString, err := internal.CreateAccessToken(Options)
+	token, err := internal.CreateAccessToken(Options)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return tokenString, nil
+	return token, nil
 }
 
-func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (string, error) {
+func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*rtoken.RToken, error) {
 	db, err := tools.NewDatabase()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	userRepo := user.NewRepository(db)
 	user, err := userRepo.Read(userID, hash)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 
 	refreshToken, err := internal.CreateRefreshToken(user.Name, Options)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	return refreshToken, nil
 }
 
-func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (string, error) {
+func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*rtoken.RToken, error) {
 	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	return refreshToken, nil
 }
