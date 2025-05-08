@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/vince-scarpa/responsible-api-go/resource/access"
+	"github.com/responsible-api/responsible-auth/resource/access"
 )
 
 type AuthWrapper struct {

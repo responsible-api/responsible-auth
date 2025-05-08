@@ -7,7 +7,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/vince-scarpa/responsible-api-go/config"
+	"github.com/responsible-api/responsible-auth/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

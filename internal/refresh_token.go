@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/vince-scarpa/responsible-api-go/auth"
-	"github.com/vince-scarpa/responsible-api-go/resource/access"
+	"github.com/responsible-api/responsible-auth/auth"
+	"github.com/responsible-api/responsible-auth/resource/access"
 
 	"github.com/golang-jwt/jwt/v5"
 )

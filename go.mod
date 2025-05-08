@@ -1,4 +1,4 @@
-module github.com/vince-scarpa/responsible-api-go
+module github.com/responsible-api/responsible-auth
 
 go 1.23.4
 

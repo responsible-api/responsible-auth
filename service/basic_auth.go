@@ -6,11 +6,11 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/vince-scarpa/responsible-api-go/auth"
-	"github.com/vince-scarpa/responsible-api-go/internal"
-	"github.com/vince-scarpa/responsible-api-go/resource/access"
-	"github.com/vince-scarpa/responsible-api-go/resource/user"
-	"github.com/vince-scarpa/responsible-api-go/tools"
+	"github.com/responsible-api/responsible-auth/auth"
+	"github.com/responsible-api/responsible-auth/internal"
+	"github.com/responsible-api/responsible-auth/resource/access"
+	"github.com/responsible-api/responsible-auth/resource/user"
+	"github.com/responsible-api/responsible-auth/tools"
 
 	"github.com/golang-jwt/jwt/v5"
 )
