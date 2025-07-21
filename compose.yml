@@ -9,17 +9,17 @@ services:
     depends_on:
       db:
         condition: service_healthy
-    command: [ "sh", "-c", "/responsible-api-go/bin/api" ]
+    command: [ "sh", "-c", "/responsible-auth/bin/api" ]
     ports:
       - ${SERVER_PORT}:${SERVER_PORT}
     volumes:
-      - .:/responsible-api-go
+      - .:/responsible-auth
     restart: always
   
   db:
     image: mysql:8.0.37
     platform: linux/arm64
-    container_name: responsible-api-db
+    container_name: responsible-api-auth-db
     volumes:
       - ./migration/schema.sql:/docker-entrypoint-initdb.d/schema.sql/:rw
       - db:/var/lib/mysql

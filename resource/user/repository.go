@@ -20,7 +20,6 @@ func NewRepository(db *gorm.DB) *Repository {
 
 func (r *Repository) Read(username string, hash string) (*User, error) {
 	user := &User{}
-	// SELECT * FROM responsible_api_users WHERE(mail = ? OR account_id = ?) AND secret = ?
 	query := r.db.Table("responsible_api_users").
 		Where(r.db.Where("mail = ?", username).Or("account_id = ?", username)).
 		Where("secret = ?", hash).
