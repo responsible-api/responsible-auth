@@ -34,7 +34,7 @@ func CreateAccessToken(options auth.AuthOptions) (*access.RToken, error) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := jwtToken.SignedString([]byte(options.SecretKey))
+	tokenString, err := jwtToken.SignedString([]string{options.SecretKey})
 	if err != nil {
 		return nil, err
 	}
