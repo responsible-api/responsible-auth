@@ -1,6 +1,7 @@
 package internal
 
 import (
+	"encoding/base64"
 	"fmt"
 	"time"
 
@@ -34,7 +35,7 @@ func CreateAccessToken(options auth.AuthOptions) (*access.RToken, error) {
 	}
 
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	tokenString, err := jwtToken.SignedString([]string{options.SecretKey})
+	tokenString, err := jwtToken.SignedString([]byte(base64.StdEncoding.EncodeToString([]byte(options.SecretKey))))
 	if err != nil {
 		return nil, err
 	}
