@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/joeshaw/envdecode"
+	"github.com/joho/godotenv"
 )
 
 type Conf struct {
@@ -21,15 +22,18 @@ type ConfServer struct {
 }
 
 type ConfDB struct {
-	Host     string `env:"DB_HOST,default=127.0.0.1"`
-	Port     int    `env:"DB_PORT,default=3306"`
-	Username string `env:"DB_USER,default=responsible_api_user"`
-	Password string `env:"DB_PASS,default=responsible_api_pass"`
-	DBName   string `env:"DB_NAME,default=responsible_api"`
-	Debug    bool   `env:"DB_DEBUG,default=false"`
+	Host     string `env:"DB_HOST,default="`
+	Port     int    `env:"DB_PORT,default=0"`
+	Username string `env:"DB_USER,default="`
+	Password string `env:"DB_PASS,default="`
+	DBName   string `env:"DB_NAME,default="`
+	Debug    bool   `env:"DB_DEBUG,default="`
 }
 
 func Config() *Conf {
+	// Load .env file if present
+	_ = godotenv.Load()
+
 	var c Conf
 	if err := envdecode.StrictDecode(&c); err != nil {
 		log.Fatalf("Failed to decode: %s", err)
@@ -39,6 +43,9 @@ func Config() *Conf {
 }
 
 func ConfigDB() *ConfDB {
+	// Load .env file if present
+	_ = godotenv.Load()
+
 	var c ConfDB
 	if err := envdecode.StrictDecode(&c); err != nil {
 		log.Fatalf("Failed to decode: %s", err)

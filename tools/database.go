@@ -33,11 +33,12 @@ func DBCon() (*gorm.DB, error) {
 	}
 
 	dsn := fmt.Sprintf(fmtMysqlDBString, c.Username, c.Password, c.Host, c.Port, c.DBName)
+	fmt.Println("Connecting to DB with DSN:", dsn)
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: l,
 	})
 	if err != nil {
-		log.Fatalf("DB connection start failure error")
+		log.Printf("DB connection start failure error: %v", err)
 		return nil, err
 	}
 
