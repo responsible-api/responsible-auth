@@ -28,7 +28,7 @@ func NewInMemoryStorage() storage.UserStorage {
 		AccountID: 123456789,
 		Name:      "testuser",
 		Mail:      "test@example.com",
-		Secret:    "ipHEh|$==*#59@|ftT;IER^qgGG_sz\"w", // matches the decoded credentials
+		Secret:    "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w", // matches the decoded credentials
 		APIKey:    "api_key_12345",
 		Status:    1, // active
 	}
