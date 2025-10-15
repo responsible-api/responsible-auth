@@ -9,8 +9,7 @@ import (
 	"github.com/responsible-api/responsible-auth/auth"
 	"github.com/responsible-api/responsible-auth/internal"
 	"github.com/responsible-api/responsible-auth/resource/access"
-	"github.com/responsible-api/responsible-auth/resource/user"
-	"github.com/responsible-api/responsible-auth/tools"
+	"github.com/responsible-api/responsible-auth/storage"
 
 	"github.com/golang-jwt/jwt/v5"
 )
@@ -19,6 +18,7 @@ var Options auth.AuthOptions
 
 type BasicAuth struct {
 	auth.AuthProvider
+	storage storage.UserStorage
 }
 
 type AuthOptions struct {
@@ -35,6 +35,11 @@ func (d *BasicAuth) SetOptions(options auth.AuthOptions) {
 	Options = options
 }
 
+// SetStorage sets the storage implementation for the BasicAuth provider.
+func (d *BasicAuth) SetStorage(storage storage.UserStorage) {
+	d.storage = storage
+}
+
 func (d *BasicAuth) Decode(hash string) (string, string, error) {
 	unpackedUsername, unpackedPassword, err := validateBasic(hash)
 	if err != nil {
@@ -46,13 +51,7 @@ func (d *BasicAuth) Decode(hash string) (string, string, error) {
 
 // Grant generates a token for the user with the given ID and password.
 func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToken, error) {
-	db, err := tools.NewDatabase()
-	if err != nil {
-		return nil, err
-	}
-
-	userRepo := user.NewRepository(db)
-	user, err := userRepo.Read(userID, hash)
+	user, err := a.storage.FindUserByCredentials(userID, hash)
 	if err != nil {
 		return nil, err
 	}
@@ -66,13 +65,7 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToke
 }
 
 func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	db, err := tools.NewDatabase()
-	if err != nil {
-		return nil, err
-	}
-
-	userRepo := user.NewRepository(db)
-	user, err := userRepo.Read(userID, hash)
+	user, err := a.storage.FindUserByCredentials(userID, hash)
 	if err != nil {
 		return nil, err
 	}

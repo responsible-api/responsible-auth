@@ -6,14 +6,14 @@ import (
 	"github.com/responsible-api/responsible-auth/auth"
 	"github.com/responsible-api/responsible-auth/internal"
 	"github.com/responsible-api/responsible-auth/resource/access"
-	"github.com/responsible-api/responsible-auth/resource/user"
-	"github.com/responsible-api/responsible-auth/tools"
+	"github.com/responsible-api/responsible-auth/storage"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
 type APIKeyAuth struct {
 	auth.AuthProvider
+	storage storage.UserStorage
 }
 
 func NewApiKeyAuth() auth.AuthInterface {
@@ -26,6 +26,11 @@ func (d *APIKeyAuth) SetOptions(options auth.AuthOptions) {
 	Options = options
 }
 
+// SetStorage sets the storage implementation for the APIKeyAuth provider.
+func (d *APIKeyAuth) SetStorage(storage storage.UserStorage) {
+	d.storage = storage
+}
+
 func (d *APIKeyAuth) Decode(APIKey string) (string, string, error) {
 	unpackedUsername, unpackedPassword, err := validateAPIKey(APIKey)
 	if err != nil {
@@ -36,13 +41,7 @@ func (d *APIKeyAuth) Decode(APIKey string) (string, string, error) {
 }
 
 func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RToken, error) {
-	db, err := tools.NewDatabase()
-	if err != nil {
-		return nil, err
-	}
-
-	userRepo := user.NewRepository(db)
-	user, err := userRepo.Read(userID, APIKey)
+	user, err := a.storage.FindUserByAPIKey(APIKey)
 	if err != nil {
 		return nil, err
 	}
@@ -56,13 +55,7 @@ func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RT
 }
 
 func (a *APIKeyAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	db, err := tools.NewDatabase()
-	if err != nil {
-		return nil, err
-	}
-
-	userRepo := user.NewRepository(db)
-	user, err := userRepo.Read(userID, hash)
+	user, err := a.storage.FindUserByAPIKey(hash)
 	if err != nil {
 		return nil, err
 	}

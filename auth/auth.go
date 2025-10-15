@@ -5,6 +5,7 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/responsible-api/responsible-auth/resource/access"
+	"github.com/responsible-api/responsible-auth/storage"
 )
 
 type AuthWrapper struct {
@@ -34,6 +35,7 @@ type AuthOptions struct {
 type AuthInterface interface {
 	Options() AuthOptions
 	SetOptions(options AuthOptions)
+	SetStorage(storage storage.UserStorage)
 	Decode(hash string) (string, string, error)
 	CreateAccessToken(userID string, hash string) (*access.RToken, error)
 	CreateRefreshToken(userID string, hash string) (*access.RToken, error)
@@ -45,8 +47,9 @@ type AuthProvider struct {
 	AuthInterface
 }
 
-func NewAuth(authProvider AuthInterface, options AuthOptions) *AuthWrapper {
+func NewAuth(authProvider AuthInterface, storage storage.UserStorage, options AuthOptions) *AuthWrapper {
 	authProvider.SetOptions(options)
+	authProvider.SetStorage(storage)
 	return &AuthWrapper{
 		Provider: authProvider,
 		Options:  options,
