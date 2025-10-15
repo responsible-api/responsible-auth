@@ -222,10 +222,18 @@ Switch to API Key authentication instead of Basic Auth:
 
 ```go
 // Use API Key provider instead of Basic Auth
-authService := auth.NewAuth(service.NewApiKeyAuth(), storage, options)
+apiKeyProvider := auth.NewAuth(service.NewApiKeyAuth(), apiStorage, auth.AuthOptions{
+    SecretKey:            "my-secret-key",    // Replace with a secure key
+    TokenDuration:        5 * time.Hour,      // 5 minute token duration
+    RefreshTokenDuration: 24 * 7 * time.Hour, // 7 day refresh token duration
+})
 
-// Authenticate with API key
-token, err := authService.Provider.CreateAccessToken("", "your-api-key-here")
+token, err := apiKeyProvider.Provider.CreateAccessToken("", "api_key_12345")
+if err != nil {
+    log.Fatalf("Failed to authenticate with API key: %v", err)
+} else {
+    log.Printf("✅ Authenticated with API key, token: %s", token.GetToken())
+}
 ```
 
 ## Development Commands
@@ -251,10 +259,10 @@ go build -o bin/api cmd/api/main.go
 
 ```
 responsible-auth/
-├── auth/                   # Core authentication logic
-├── service/               # Authentication providers (Basic Auth, API Key)
-├── storage/               # Storage interface and implementations
-│   ├── interface.go       # UserStorage interface definition
+├── auth/                 # Core authentication logic
+├── service/              # Authentication providers (Basic Auth, API Key)
+├── storage/              # Storage interface and implementations
+│   ├── interface.go      # UserStorage interface definition
 │   ├── mysql/            # MySQL implementation
 │   └── memory/           # In-memory implementation
 ├── resource/             # Data models and DTOs
