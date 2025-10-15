@@ -305,6 +305,25 @@ storage := memory.NewInMemoryStorage()
 authService := auth.NewAuth(provider, storage, options)
 ```
 
+## Testing
+#### Run all tests
+```bash
+go test ./...
+```
+
+#### Run with verbose output
+```bash
+go test -v ./...
+```
+
+#### Run specific components
+```bash
+go test ./service -v
+go test ./examples/memory -v
+go test ./internal -v
+```
+
+---   
 ## Contributing
 
 Feedback and suggestions are welcome! Please open an issue for any bugs or feature requests.
