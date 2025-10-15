@@ -299,16 +299,16 @@ func TestValidateBasic(t *testing.T) {
 		{
 			name:        "empty after colon",
 			input:       "dGVzdDo=", // "test:"
-			expectUser:  "test",
+			expectUser:  "",
 			expectPass:  "",
-			expectError: false,
+			expectError: true,
 		},
 		{
 			name:        "empty before colon",
 			input:       "OnRlc3Q=", // ":test"
 			expectUser:  "",
-			expectPass:  "test",
-			expectError: false,
+			expectPass:  "",
+			expectError: true,
 		},
 	}
 
