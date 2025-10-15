@@ -95,7 +95,7 @@ func main() {
 go run examples/memory-storage/main.go
 ```
 
-### Option 2: MySQL Storage (Production Ready)
+### Option 2: MySQL Storage
 
 For production applications with persistent storage:
 
