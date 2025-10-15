@@ -45,7 +45,10 @@ func main() {
 	model.WithExpiresIn(expiry.Unix())
 	model.WithCreatedAt(time.Now().Unix())
 
+	// Convert to response DTO
 	response := model.ToResponseDTO()
+
+	// Print the token details for demonstration
 	log.Printf("Access Token: %s", response.AccessToken)
 	log.Printf("Refresh Token: %s", response.RefreshToken)
 	log.Println("🎉 Successfully generated tokens using in-memory storage!")
@@ -58,6 +61,7 @@ func main() {
 	}
 }
 
+// isValidJWT validates a JWT token string and returns true if valid, false otherwise.
 func isValidJWT(token string) bool {
 	// Create auth service with in-memory storage
 	authService := authService()
