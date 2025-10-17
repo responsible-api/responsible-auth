@@ -1,8 +1,6 @@
 package service
 
 import (
-	"log"
-
 	"github.com/responsible-api/responsible-auth/auth"
 	"github.com/responsible-api/responsible-auth/internal"
 	"github.com/responsible-api/responsible-auth/resource/access"
@@ -49,12 +47,7 @@ func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RT
 }
 
 func (a *APIKeyAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	user, err := a.storage.FindUserByAPIKey(hash)
-	if err != nil {
-		return nil, err
-	}
-
-	refreshToken, err := internal.CreateRefreshToken(user.Name, Options)
+	refreshToken, err := internal.CreateRefreshToken(userID, Options)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +71,6 @@ func (a *APIKeyAuth) Validate(tokenString string) (*jwt.Token, error) {
 }
 
 func (d *APIKeyAuth) validateAPIKey(APIKey string) (string, string, error) {
-	log.Printf(">>>>>> API Key: %s", APIKey)
 	user, err := d.storage.FindUserByAPIKey(APIKey)
 	if err != nil {
 		return "", "", err
