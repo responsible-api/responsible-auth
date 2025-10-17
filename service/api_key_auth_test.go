@@ -261,6 +261,8 @@ func TestAPIKeyAuth_GrantRefreshToken(t *testing.T) {
 }
 
 func TestValidateAPIKey(t *testing.T) {
+	provider := NewApiKeyAuth().(*APIKeyAuth)
+
 	tests := []struct {
 		name        string
 		input       string
@@ -293,7 +295,7 @@ func TestValidateAPIKey(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			user, pass, err := validateAPIKey(tt.input)
+			user, pass, err := provider.validateAPIKey(tt.input)
 
 			if tt.expectError && err == nil {
 				t.Errorf("validateAPIKey() expected error but got none")

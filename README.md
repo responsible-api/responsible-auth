@@ -222,18 +222,34 @@ Switch to API Key authentication instead of Basic Auth:
 
 ```go
 // Use API Key provider instead of Basic Auth
-apiKeyProvider := auth.NewAuth(service.NewApiKeyAuth(), apiStorage, auth.AuthOptions{
-    SecretKey:            "my-secret-key",    // Replace with a secure key
-    TokenDuration:        5 * time.Hour,      // 5 minute token duration
-    RefreshTokenDuration: 24 * 7 * time.Hour, // 7 day refresh token duration
-})
+storage := memory.NewInMemoryStorage()
+apiProvider := auth.NewAuth(service.NewApiKeyAuth(), storage, auth.AuthOptions{
+    SecretKey:            "your-super-secure-secret-key-here", // Replace with a secure key
+    TokenDuration:        5 * time.Hour,                       // 5 minute token duration
+    RefreshTokenDuration: 24 * 7 * time.Hour,                  // 7 day refresh token duration
+    TokenLeeway:          10 * time.Second,                    // 10 seconds leeway
+    CookieDuration:       7 * 24 * time.Hour,                  // 7 days cookie duration
+    Issuer:               "https://example.com",               // Replace with your issuer
+    IssuedAt:             time.Now().Unix(),                   // Time we issued the token, can be now or in the future
+    NotBefore:            time.Now().Unix(),                   // Time before which the token is not valid
+    Subject:              "test-user",                         // Replace with your subject,
 
-token, err := apiKeyProvider.Provider.CreateAccessToken("", "api_key_12345")
+    // Custom claims if needed
+    CustomClaims: map[string]interface{}{
+        "organization": "example-org",
+        "tier":         "premium",
+    },
+})
+apiUser, apiPass, err := apiProvider.Provider.Decode("api_key_12345")
 if err != nil {
-    log.Fatalf("Failed to authenticate with API key: %v", err)
-} else {
-    log.Printf("✅ Authenticated with API key, token: %s", token.GetToken())
+    log.Fatalf("Failed to validate API key: %v", err)
 }
+log.Printf("API Key valid: %v", apiUser != "" && apiPass != "")
+apiToken, err := apiProvider.Provider.CreateAccessToken(apiUser, apiPass)
+if err != nil {
+    log.Fatalf("Failed to create access token for API user %s: %v", apiUser, err)
+}
+log.Printf(" -- - API Access Token created: %s", apiToken.GetToken())
 ```
 
 ## Development Commands

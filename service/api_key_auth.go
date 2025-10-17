@@ -1,7 +1,7 @@
 package service
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/responsible-api/responsible-auth/auth"
 	"github.com/responsible-api/responsible-auth/internal"
@@ -32,7 +32,7 @@ func (d *APIKeyAuth) SetStorage(storage storage.UserStorage) {
 }
 
 func (d *APIKeyAuth) Decode(APIKey string) (string, string, error) {
-	unpackedUsername, unpackedPassword, err := validateAPIKey(APIKey)
+	unpackedUsername, unpackedPassword, err := d.validateAPIKey(APIKey)
 	if err != nil {
 		return "", "", err
 	}
@@ -41,12 +41,6 @@ func (d *APIKeyAuth) Decode(APIKey string) (string, string, error) {
 }
 
 func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RToken, error) {
-	user, err := a.storage.FindUserByAPIKey(APIKey)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("User found:", user)
-
 	token, err := internal.CreateAccessToken(Options)
 	if err != nil {
 		return nil, err
@@ -83,14 +77,11 @@ func (a *APIKeyAuth) Validate(tokenString string) (*jwt.Token, error) {
 	return token, nil
 }
 
-func validateAPIKey(APIKey string) (string, string, error) {
-	// Implement your API key validation logic here
-	// For example, you might want to decode the API key and extract the username and password
-	// or perform any other necessary validation.
-
-	// This is just a placeholder implementation.
-	unpackedUsername := "exampleUser"
-	unpackedPassword := "examplePassword"
-
-	return unpackedUsername, unpackedPassword, nil
+func (d *APIKeyAuth) validateAPIKey(APIKey string) (string, string, error) {
+	log.Printf(">>>>>> API Key: %s", APIKey)
+	user, err := d.storage.FindUserByAPIKey(APIKey)
+	if err != nil {
+		return "", "", err
+	}
+	return user.Name, user.Secret, nil
 }
