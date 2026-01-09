@@ -3,7 +3,6 @@ package service
 import (
 	"encoding/base64"
 	"errors"
-	"fmt"
 	"strings"
 
 	"github.com/responsible-api/responsible-auth/auth"
@@ -51,12 +50,10 @@ func (d *BasicAuth) Decode(hash string) (string, string, error) {
 
 // Grant generates a token for the user with the given ID and password.
 func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToken, error) {
-	user, err := a.storage.FindUserByCredentials(userID, hash)
+	_, err := a.storage.FindUserByCredentials(userID, hash)
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println("User found:", user)
-
 	token, err := internal.CreateAccessToken(Options)
 	if err != nil {
 		return nil, err
