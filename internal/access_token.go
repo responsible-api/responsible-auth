@@ -20,7 +20,7 @@ func CreateAccessToken(options auth.AuthOptions) (*access.RToken, error) {
 	// Set the expiration time to the specified duration
 	// Return the generated token or an error if something goes wrong
 	claims := &concerns.ClaimsGeneric{
-		RegisteredClaims: jwt.RegisteredClaims{
+		RegisteredClaims: concerns.RegisteredClaims{
 			Issuer:    setIssuer(options.Issuer),
 			Subject:   setSubject(options.Subject),
 			IssuedAt:  jwt.NewNumericDate(setIssuedAt(options.IssuedAt)),

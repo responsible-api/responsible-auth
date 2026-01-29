@@ -266,7 +266,7 @@ func TestValidate(t *testing.T) {
 				// Create a token that's slightly expired but within leeway
 				// Use a smaller expiry offset since JWT library + our validation both need to pass
 				claims := &concerns.ClaimsGeneric{
-					RegisteredClaims: jwt.RegisteredClaims{
+					RegisteredClaims: concerns.RegisteredClaims{
 						ExpiresAt: jwt.NewNumericDate(time.Now().Add(30 * time.Second)), // Still valid
 						IssuedAt:  jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
 						NotBefore: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
@@ -375,7 +375,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "future expiry",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 				},
 			},
@@ -384,7 +384,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "past expiry",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
 				},
 			},
@@ -393,7 +393,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "nil expiry",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: nil,
 				},
 			},
@@ -402,7 +402,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "expiry exactly now (should be invalid)",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now()),
 				},
 			},
@@ -411,7 +411,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "expiry 1 second in future",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Second)),
 				},
 			},
@@ -420,7 +420,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "expiry 1 second in past",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(-1 * time.Second)),
 				},
 			},
@@ -429,7 +429,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "expiry far in future",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 				},
 			},
@@ -438,7 +438,7 @@ func TestValidExpiry(t *testing.T) {
 		{
 			name: "expiry far in past",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(-24 * time.Hour)),
 				},
 			},
@@ -465,7 +465,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "past not before",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
 				},
 			},
@@ -474,7 +474,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "future not before",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 				},
 			},
@@ -483,7 +483,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "nil not before",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: nil,
 				},
 			},
@@ -492,7 +492,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "not before exactly now (should be valid)",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now()),
 				},
 			},
@@ -501,7 +501,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "not before 1 second in past",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(-1 * time.Second)),
 				},
 			},
@@ -510,7 +510,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "not before 1 second in future",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(1 * time.Second)),
 				},
 			},
@@ -519,7 +519,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "not before far in past",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(-24 * time.Hour)),
 				},
 			},
@@ -528,7 +528,7 @@ func TestValidNotBefore(t *testing.T) {
 		{
 			name: "not before far in future",
 			claims: &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					NotBefore: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
 				},
 			},
@@ -643,7 +643,7 @@ func TestValidateWithDifferentSigningMethods(t *testing.T) {
 			options := testutils.TestAuthOptions()
 
 			claims := &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 					IssuedAt:  jwt.NewNumericDate(time.Now()),
 					NotBefore: jwt.NewNumericDate(time.Now()),
@@ -721,7 +721,7 @@ func TestValidateWithTokenLeeway(t *testing.T) {
 			options.TokenLeeway = tt.leeway
 
 			claims := &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(tt.expiryOffset)),
 					IssuedAt:  jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
 					NotBefore: jwt.NewNumericDate(time.Now().Add(-1 * time.Hour)),
@@ -805,7 +805,7 @@ func TestValidateCustomClaims(t *testing.T) {
 			options.CustomClaims = tt.customClaims
 
 			claims := &concerns.ClaimsGeneric{
-				RegisteredClaims: jwt.RegisteredClaims{
+				RegisteredClaims: concerns.RegisteredClaims{
 					ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 					IssuedAt:  jwt.NewNumericDate(time.Now()),
 					NotBefore: jwt.NewNumericDate(time.Now()),
@@ -886,7 +886,7 @@ func TestValidateEdgeCases(t *testing.T) {
 				}
 
 				claims := &concerns.ClaimsGeneric{
-					RegisteredClaims: jwt.RegisteredClaims{
+					RegisteredClaims: concerns.RegisteredClaims{
 						ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 						IssuedAt:  jwt.NewNumericDate(time.Now()),
 						NotBefore: jwt.NewNumericDate(time.Now()),
@@ -907,7 +907,7 @@ func TestValidateEdgeCases(t *testing.T) {
 				options.TokenLeeway = 0
 
 				claims := &concerns.ClaimsGeneric{
-					RegisteredClaims: jwt.RegisteredClaims{
+					RegisteredClaims: concerns.RegisteredClaims{
 						ExpiresAt: jwt.NewNumericDate(time.Now().Add(1 * time.Hour)),
 						IssuedAt:  jwt.NewNumericDate(time.Now()),
 						NotBefore: jwt.NewNumericDate(time.Now()),
