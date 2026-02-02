@@ -21,12 +21,13 @@ type AuthOptions struct {
 	CookieDuration       time.Duration
 
 	// Optional fields
-	Issuer    string `json:"issuer,omitempty"`
-	IssuedAt  int64  `json:"issued_at,omitempty"`
-	NotBefore int64  `json:"not_before,omitempty"`
-	Subject   string `json:"subject,omitempty"`
-	Scopes    string `json:"scopes,omitempty"`
-	Role      string `json:"role,omitempty"`
+	Issuer    string   `json:"issuer,omitempty"`
+	IssuedAt  int64    `json:"issued_at,omitempty"`
+	NotBefore int64    `json:"not_before,omitempty"`
+	Audience  []string `json:"audience,omitempty"`
+	Subject   string   `json:"subject,omitempty"`
+	Scopes    string   `json:"scopes,omitempty"`
+	Role      string   `json:"role,omitempty"`
 
 	// Custom claims
 	CustomClaims map[string]interface{} `json:"custom_claims,omitempty"`
