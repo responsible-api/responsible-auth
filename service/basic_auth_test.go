@@ -24,13 +24,15 @@ func TestBasicAuth_SetOptions(t *testing.T) {
 
 	provider.SetOptions(options)
 
+	basicProvider := provider.(*BasicAuth)
+
 	// Verify options were set by checking the global Options variable
-	if Options.SecretKey != options.SecretKey {
-		t.Errorf("SetOptions() SecretKey = %v, want %v", Options.SecretKey, options.SecretKey)
+	if basicProvider.options.SecretKey != options.SecretKey {
+		t.Errorf("SetOptions() SecretKey = %v, want %v", basicProvider.options.SecretKey, options.SecretKey)
 	}
 
-	if Options.TokenDuration != options.TokenDuration {
-		t.Errorf("SetOptions() TokenDuration = %v, want %v", Options.TokenDuration, options.TokenDuration)
+	if basicProvider.options.TokenDuration != options.TokenDuration {
+		t.Errorf("SetOptions() TokenDuration = %v, want %v", basicProvider.options.TokenDuration, options.TokenDuration)
 	}
 }
 

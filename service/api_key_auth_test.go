@@ -24,13 +24,15 @@ func TestAPIKeyAuth_SetOptions(t *testing.T) {
 
 	provider.SetOptions(options)
 
-	// Verify options were set by checking the global Options variable
-	if Options.SecretKey != options.SecretKey {
-		t.Errorf("SetOptions() SecretKey = %v, want %v", Options.SecretKey, options.SecretKey)
+	apiKeyProvider := provider.(*APIKeyAuth)
+
+	// Verify options were set by checking the options variable
+	if apiKeyProvider.options.SecretKey != options.SecretKey {
+		t.Errorf("SetOptions() SecretKey = %v, want %v", apiKeyProvider.options.SecretKey, options.SecretKey)
 	}
 
-	if Options.TokenDuration != options.TokenDuration {
-		t.Errorf("SetOptions() TokenDuration = %v, want %v", Options.TokenDuration, options.TokenDuration)
+	if apiKeyProvider.options.TokenDuration != options.TokenDuration {
+		t.Errorf("SetOptions() TokenDuration = %v, want %v", apiKeyProvider.options.TokenDuration, options.TokenDuration)
 	}
 }
 

@@ -12,6 +12,7 @@ import (
 type APIKeyAuth struct {
 	auth.AuthProvider
 	storage storage.UserStorage
+	options auth.AuthOptions
 }
 
 func NewApiKeyAuth() auth.AuthInterface {
@@ -21,7 +22,7 @@ func NewApiKeyAuth() auth.AuthInterface {
 
 // SetOptions sets the options for the APIKeyAuth provider.
 func (d *APIKeyAuth) SetOptions(options auth.AuthOptions) {
-	Options = options
+	d.options = options
 }
 
 // SetStorage sets the storage implementation for the APIKeyAuth provider.
@@ -39,7 +40,7 @@ func (d *APIKeyAuth) Decode(APIKey string) (string, string, error) {
 }
 
 func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RToken, error) {
-	token, err := internal.CreateAccessToken(Options)
+	token, err := internal.CreateAccessToken(a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +48,7 @@ func (a *APIKeyAuth) CreateAccessToken(userID string, APIKey string) (*access.RT
 }
 
 func (a *APIKeyAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	refreshToken, err := internal.CreateRefreshToken(userID, Options)
+	refreshToken, err := internal.CreateRefreshToken(userID, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -55,7 +56,7 @@ func (a *APIKeyAuth) CreateRefreshToken(userID string, hash string) (*access.RTo
 }
 
 func (a *APIKeyAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken, error) {
-	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
+	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +64,7 @@ func (a *APIKeyAuth) GrantRefreshToken(refreshTokenString string) (*access.RToke
 }
 
 func (a *APIKeyAuth) Validate(tokenString string) (*jwt.Token, error) {
-	token, err := internal.Validate(tokenString, Options)
+	token, err := internal.Validate(tokenString, a.options)
 	if err != nil {
 		return nil, err
 	}

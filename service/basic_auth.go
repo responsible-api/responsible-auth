@@ -13,11 +13,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var Options auth.AuthOptions
-
 type BasicAuth struct {
 	auth.AuthProvider
 	storage storage.UserStorage
+	options auth.AuthOptions
 }
 
 type AuthOptions struct {
@@ -31,7 +30,7 @@ func NewBasicAuth() auth.AuthInterface {
 
 // SetOptions sets the options for the BasicAuth provider.
 func (d *BasicAuth) SetOptions(options auth.AuthOptions) {
-	Options = options
+	d.options = options
 }
 
 // SetStorage sets the storage implementation for the BasicAuth provider.
@@ -54,7 +53,7 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToke
 	if err != nil {
 		return nil, err
 	}
-	token, err := internal.CreateAccessToken(Options)
+	token, err := internal.CreateAccessToken(a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +66,7 @@ func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RTok
 		return nil, err
 	}
 
-	refreshToken, err := internal.CreateRefreshToken(user.Name, Options)
+	refreshToken, err := internal.CreateRefreshToken(user.Name, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +74,7 @@ func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RTok
 }
 
 func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken, error) {
-	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
+	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -83,7 +82,7 @@ func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken
 }
 
 func (a *BasicAuth) Validate(tokenString string) (*jwt.Token, error) {
-	token, err := internal.Validate(tokenString, Options)
+	token, err := internal.Validate(tokenString, a.options)
 	if err != nil {
 		return nil, err
 	}
