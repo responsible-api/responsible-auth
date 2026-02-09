@@ -19,13 +19,14 @@ type BasicAuth struct {
 	options auth.AuthOptions
 }
 
-type AuthOptions struct {
-	Options auth.AuthOptions
-}
-
 func NewBasicAuth() auth.AuthInterface {
 	var provider auth.AuthInterface = &BasicAuth{}
 	return provider
+}
+
+// Options returns the options of the BasicAuth provider.
+func (d *BasicAuth) Options() auth.AuthOptions {
+	return d.options
 }
 
 // SetOptions sets the options for the BasicAuth provider.
@@ -61,12 +62,12 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToke
 }
 
 func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	user, err := a.storage.FindUserByCredentials(userID, hash)
+	_, err := a.storage.FindUserByCredentials(userID, hash)
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken, err := internal.CreateRefreshToken(user.Name, a.options)
+	refreshToken, err := internal.CreateRefreshToken(userID, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -87,6 +88,10 @@ func (a *BasicAuth) Validate(tokenString string) (*jwt.Token, error) {
 		return nil, err
 	}
 	return token, nil
+}
+
+func (a *BasicAuth) ValidateRefreshToken(tokenString string) (*jwt.Token, error) {
+	return internal.ValidateRefreshToken(tokenString, a.options)
 }
 
 // BasicAuth decodes a base64-encoded client credentials string and returns the username and password.

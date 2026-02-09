@@ -42,6 +42,7 @@ type AuthInterface interface {
 	CreateRefreshToken(userID string, hash string) (*access.RToken, error)
 	GrantRefreshToken(refreshTokenString string) (*access.RToken, error)
 	Validate(tokenString string) (*jwt.Token, error)
+	ValidateRefreshToken(tokenString string) (*jwt.Token, error)
 }
 
 type AuthProvider struct {

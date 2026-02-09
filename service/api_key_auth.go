@@ -20,6 +20,11 @@ func NewApiKeyAuth() auth.AuthInterface {
 	return provider
 }
 
+// Options returns the options of the APIKeyAuth provider.
+func (d *APIKeyAuth) Options() auth.AuthOptions {
+	return d.options
+}
+
 // SetOptions sets the options for the APIKeyAuth provider.
 func (d *APIKeyAuth) SetOptions(options auth.AuthOptions) {
 	d.options = options
@@ -69,6 +74,10 @@ func (a *APIKeyAuth) Validate(tokenString string) (*jwt.Token, error) {
 		return nil, err
 	}
 	return token, nil
+}
+
+func (a *APIKeyAuth) ValidateRefreshToken(tokenString string) (*jwt.Token, error) {
+	return internal.ValidateRefreshToken(tokenString, a.options)
 }
 
 func (d *APIKeyAuth) validateAPIKey(APIKey string) (string, string, error) {

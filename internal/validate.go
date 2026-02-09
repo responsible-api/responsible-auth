@@ -2,6 +2,7 @@ package internal
 
 import (
 	"fmt"
+	"net/http"
 	"time"
 
 	"github.com/responsible-api/responsible-auth/auth"
@@ -26,7 +27,7 @@ func Validate(tokenString string, options auth.AuthOptions) (*jwt.Token, error) 
 		return nil, err
 	}
 
-	if claims, ok := token.Claims.(*concerns.ClaimsGeneric); ok && token.Valid {
+	if claims := token.Claims; claims != nil {
 		if !validExpiry(claims) {
 			return nil, fmt.Errorf("token expired")
 		}
@@ -38,10 +39,30 @@ func Validate(tokenString string, options auth.AuthOptions) (*jwt.Token, error) 
 	return token, nil
 }
 
-func validExpiry(claims *concerns.ClaimsGeneric) bool {
-	return !(claims.ExpiresAt == nil || claims.ExpiresAt.Time.Before(time.Now()))
+func validExpiry(claims jwt.Claims) bool {
+	exp, err := claims.GetExpirationTime()
+	return err == nil && exp != nil && !exp.Time.Before(time.Now())
 }
 
-func validNotBefore(claims *concerns.ClaimsGeneric) bool {
-	return !(claims.NotBefore == nil || claims.NotBefore.Time.After(time.Now()))
+func validNotBefore(claims jwt.Claims) bool {
+	nbf, err := claims.GetNotBefore()
+	return err == nil && nbf != nil && !nbf.Time.After(time.Now())
+}
+
+func ValidateRefreshToken(tokenString string, options auth.AuthOptions) (*jwt.Token, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &jwt.MapClaims{}, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, http.ErrAbortHandler
+		}
+		return []byte(options.SecretKey), nil
+	})
+	if err != nil || !token.Valid {
+		return nil, fmt.Errorf("invalid refresh token")
+	}
+	if claims := token.Claims; claims != nil {
+		if !validExpiry(claims) {
+			return nil, fmt.Errorf("refresh token expired")
+		}
+	}
+	return token, nil
 }
