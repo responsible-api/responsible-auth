@@ -22,6 +22,7 @@ func CreateAccessToken(options auth.AuthOptions) (*access.RToken, error) {
 	claims := &concerns.ClaimsGeneric{
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    setIssuer(options.Issuer),
+			Audience:  options.Audience,
 			Subject:   setSubject(options.Subject),
 			IssuedAt:  jwt.NewNumericDate(setIssuedAt(options.IssuedAt)),
 			ExpiresAt: jwt.NewNumericDate(setExpiresAt(options.TokenDuration)),

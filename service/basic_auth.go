@@ -13,15 +13,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var Options auth.AuthOptions
-
 type BasicAuth struct {
 	auth.AuthProvider
 	storage storage.UserStorage
-}
-
-type AuthOptions struct {
-	Options auth.AuthOptions
+	options auth.AuthOptions
 }
 
 func NewBasicAuth() auth.AuthInterface {
@@ -29,9 +24,14 @@ func NewBasicAuth() auth.AuthInterface {
 	return provider
 }
 
+// Options returns the options of the BasicAuth provider.
+func (d *BasicAuth) Options() auth.AuthOptions {
+	return d.options
+}
+
 // SetOptions sets the options for the BasicAuth provider.
 func (d *BasicAuth) SetOptions(options auth.AuthOptions) {
-	Options = options
+	d.options = options
 }
 
 // SetStorage sets the storage implementation for the BasicAuth provider.
@@ -54,7 +54,7 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToke
 	if err != nil {
 		return nil, err
 	}
-	token, err := internal.CreateAccessToken(Options)
+	token, err := internal.CreateAccessToken(a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -62,12 +62,12 @@ func (a *BasicAuth) CreateAccessToken(userID string, hash string) (*access.RToke
 }
 
 func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RToken, error) {
-	user, err := a.storage.FindUserByCredentials(userID, hash)
+	_, err := a.storage.FindUserByCredentials(userID, hash)
 	if err != nil {
 		return nil, err
 	}
 
-	refreshToken, err := internal.CreateRefreshToken(user.Name, Options)
+	refreshToken, err := internal.CreateRefreshToken(userID, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (a *BasicAuth) CreateRefreshToken(userID string, hash string) (*access.RTok
 }
 
 func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken, error) {
-	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, Options)
+	refreshToken, err := internal.GrantRefreshToken(refreshTokenString, a.options)
 	if err != nil {
 		return nil, err
 	}
@@ -83,11 +83,15 @@ func (a *BasicAuth) GrantRefreshToken(refreshTokenString string) (*access.RToken
 }
 
 func (a *BasicAuth) Validate(tokenString string) (*jwt.Token, error) {
-	token, err := internal.Validate(tokenString, Options)
+	token, err := internal.Validate(tokenString, a.options)
 	if err != nil {
 		return nil, err
 	}
 	return token, nil
+}
+
+func (a *BasicAuth) ValidateRefreshToken(tokenString string) (*jwt.Token, error) {
+	return internal.ValidateRefreshToken(tokenString, a.options)
 }
 
 // BasicAuth decodes a base64-encoded client credentials string and returns the username and password.
