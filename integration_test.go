@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"testing"
 	"time"
 
@@ -31,6 +32,8 @@ func TestBasicAuthIntegration(t *testing.T) {
 
 		// 2. Create access token
 		accessToken, err := authService.Provider.CreateAccessToken(username, password)
+		fmt.Printf("Access token: %v\n", authService.Provider.Options())
+
 		if err != nil {
 			t.Fatalf("Failed to create access token: %v", err)
 		}
@@ -342,7 +345,7 @@ func TestErrorHandling(t *testing.T) {
 		// Configure mock storage to return errors
 		storage.SetError(true, "database connection failed")
 
-		_, err := authService.Provider.CreateAccessToken("test@example.com", "test-password-hash")
+		_, err := authService.Provider.CreateAccessToken("test@example.com", "your-super-secure-secret-key-here")
 		if err == nil {
 			t.Error("Expected error from storage")
 		}
@@ -355,7 +358,7 @@ func TestErrorHandling(t *testing.T) {
 		storage.SetError(false, "")
 
 		// Should work normally now
-		_, err = authService.Provider.CreateAccessToken("test@example.com", "test-password-hash")
+		_, err = authService.Provider.CreateAccessToken("test@example.com", "your-super-secure-secret-key-here")
 		if err != nil {
 			t.Errorf("Unexpected error after reset: %v", err)
 		}

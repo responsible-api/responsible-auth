@@ -61,7 +61,7 @@ func TestBasicAuth_Decode(t *testing.T) {
 			name:        "valid basic auth",
 			input:       testutils.ValidBasicAuthCredentials(),
 			expectUser:  "test@example.com",
-			expectPass:  "test-password-hash",
+			expectPass:  "your-super-secure-secret-key-here",
 			expectError: false,
 		},
 		{
@@ -131,7 +131,7 @@ func TestBasicAuth_CreateAccessToken(t *testing.T) {
 		{
 			name:        "valid credentials",
 			userID:      "test@example.com",
-			hash:        "test-password-hash",
+			hash:        "your-super-secure-secret-key-here",
 			expectError: false,
 		},
 		{
@@ -194,7 +194,7 @@ func TestBasicAuth_CreateRefreshToken(t *testing.T) {
 		{
 			name:        "valid credentials",
 			userID:      "test@example.com",
-			hash:        "test-password-hash",
+			hash:        "your-super-secure-secret-key-here",
 			expectError: false,
 		},
 		{
@@ -279,9 +279,9 @@ func TestValidateBasic(t *testing.T) {
 	}{
 		{
 			name:        "valid credentials",
-			input:       "dGVzdEBleGFtcGxlLmNvbTp0ZXN0LXBhc3N3b3JkLWhhc2g=", // test@example.com:test-password-hash
+			input:       "dGVzdEBleGFtcGxlLmNvbTp0ZXN0LXBhc3N3b3JkLWhhc2g=", // test@example.com:your-super-secure-secret-key-here
 			expectUser:  "test@example.com",
-			expectPass:  "test-password-hash",
+			expectPass:  "your-super-secure-secret-key-here",
 			expectError: false,
 		},
 		{

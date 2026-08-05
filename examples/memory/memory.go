@@ -26,17 +26,17 @@ func NewInMemoryStorage() storage.UserStorage {
 	// Add sample users for demonstration
 	sampleUser := &user.User{
 		AccountID: 123456789,
-		Name:      "test-user",
+		Name:      "testuser",
 		Mail:      "test@example.com",
-		Secret:    "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w", // matches the decoded credentials
-		APIKey:    "api_key_12345",
+		Secret:    "your-super-secure-secret-key-here", // matches testutils.ValidBasicAuthCredentials()
+		APIKey:    "test-api-key-12345",
 		Status:    1, // active
 	}
 
 	storage.users["test@example.com"] = sampleUser
-	storage.users["test-user"] = sampleUser
+	storage.users["testuser"] = sampleUser
 	storage.users["123456789"] = sampleUser
-	storage.apiKeys["api_key_12345"] = sampleUser
+	storage.apiKeys["test-api-key-12345"] = sampleUser
 
 	return storage
 }

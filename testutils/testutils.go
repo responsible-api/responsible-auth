@@ -10,12 +10,12 @@ import (
 // TestAuthOptions returns a standard set of auth options for testing
 func TestAuthOptions() auth.AuthOptions {
 	return auth.AuthOptions{
-		SecretKey:            "test-secret-key-32-characters!",
+		SecretKey:            "your-super-secure-secret-key-here",
 		TokenDuration:        1 * time.Hour,
 		RefreshTokenDuration: 24 * time.Hour,
 		TokenLeeway:          30 * time.Second,
 		CookieDuration:       24 * time.Hour,
-		Issuer:               "test-issuer",
+		Issuer:               "testuser",
 		IssuedAt:             time.Now().Unix(),
 		NotBefore:            time.Now().Unix(),
 		Subject:              "test-subject",
@@ -37,7 +37,7 @@ func TestUser() *user.User {
 		Created:   uint64(time.Now().Unix()),
 		Access:    uint64(time.Now().Unix()),
 		Status:    1,
-		Secret:    "test-password-hash",
+		Secret:    "your-super-secure-secret-key-here",
 		APIKey:    "test-api-key-12345",
 		Refresh:   "",
 	}
@@ -51,9 +51,9 @@ func TestUserWithRefresh(refreshToken string) *user.User {
 }
 
 // ValidBasicAuthCredentials returns a valid base64-encoded basic auth string
-// Encodes "test@example.com:test-password-hash"
+// Encodes "test@example.com:your-your-super-secure-secret-key-here"
 func ValidBasicAuthCredentials() string {
-	return "dGVzdEBleGFtcGxlLmNvbTp0ZXN0LXBhc3N3b3JkLWhhc2g="
+	return "dGVzdEBleGFtcGxlLmNvbTp5b3VyLXRlc3QtcGFzc3dvcmQtaGFzaA=="
 }
 
 // InvalidBasicAuthCredentials returns various invalid basic auth strings for testing

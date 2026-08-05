@@ -31,21 +31,21 @@ func TestInMemoryStorage_FindUserByCredentials(t *testing.T) {
 		{
 			name:        "valid email and credentials",
 			username:    "test@example.com",
-			credentials: "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w",
+			credentials: "your-super-secure-secret-key-here",
 			expectError: false,
 			expectUser:  true,
 		},
 		{
 			name:        "valid account ID and credentials",
 			username:    "123456789",
-			credentials: "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w",
+			credentials: "your-super-secure-secret-key-here",
 			expectError: false,
 			expectUser:  true,
 		},
 		{
 			name:        "invalid username",
 			username:    "nonexistent@example.com",
-			credentials: "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w",
+			credentials: "your-super-secure-secret-key-here",
 			expectError: true,
 			expectUser:  false,
 		},
@@ -106,7 +106,7 @@ func TestInMemoryStorage_FindUserByAPIKey(t *testing.T) {
 	}{
 		{
 			name:        "valid api key",
-			apiKey:      "api_key_12345",
+			apiKey:      "test-api-key-12345",
 			expectError: false,
 			expectUser:  true,
 		},
@@ -143,8 +143,8 @@ func TestInMemoryStorage_FindUserByAPIKey(t *testing.T) {
 			}
 
 			if tt.expectUser && user != nil {
-				if user.APIKey != "api_key_12345" {
-					t.Errorf("FindUserByAPIKey() user.APIKey = %v, want %v", user.APIKey, "api_key_12345")
+				if user.APIKey != "test-api-key-12345" {
+					t.Errorf("FindUserByAPIKey() user.APIKey = %v, want %v", user.APIKey, "test-api-key-12345")
 				}
 			}
 		})
@@ -267,13 +267,13 @@ func TestInMemoryStorage_Interface(t *testing.T) {
 	testUser := testutils.TestUser()
 
 	// Test FindUserByCredentials
-	_, err := userStorage.FindUserByCredentials("test@example.com", "ipHEh|$==*#59@|ftT;IER^qgGG_sz!w")
+	_, err := userStorage.FindUserByCredentials(testUser.Mail, testUser.Secret)
 	if err != nil {
 		t.Errorf("Interface method FindUserByCredentials failed: %v", err)
 	}
 
 	// Test FindUserByAPIKey
-	_, err = userStorage.FindUserByAPIKey("api_key_12345")
+	_, err = userStorage.FindUserByAPIKey(testUser.APIKey)
 	if err != nil {
 		t.Errorf("Interface method FindUserByAPIKey failed: %v", err)
 	}

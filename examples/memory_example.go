@@ -15,8 +15,8 @@ func main() {
 	// Create auth service with in-memory storage
 	authService := authService()
 
-	// Decode the basic auth credentials (test@example.com:ipHEh|$==*#59@|ftT;IER^qgGG_sz!w)
-	user, pass, err := authService.Provider.Decode("dGVzdEBleGFtcGxlLmNvbTppcEhFaHwkPT0qIzU5QHxmdFQ7SUVSXnFnR0dfc3ohdw==")
+	// Decode the basic auth credentials (test@example.com:your-super-secure-secret-key-here)
+	user, pass, err := authService.Provider.Decode("dGVzdEBleGFtcGxlLmNvbTp0ZXN0LXBhc3N3b3JkLWhhc2g=")
 	if err != nil {
 		log.Fatalf("Failed to decode basic auth: %v", err)
 	}
@@ -82,15 +82,15 @@ func authService() *auth.AuthWrapper {
 
 	// Create auth service with in-memory storage
 	provider := auth.NewAuth(service.NewBasicAuth(), storage, auth.AuthOptions{
-		SecretKey:            "8m$~t^GbEW<<>cE$BWr5m>)rA>ifVa(3", // Replace with a secure key
-		TokenDuration:        5 * time.Hour,                      // 5 minute token duration
-		RefreshTokenDuration: 24 * 7 * time.Hour,                 // 7 day refresh token duration
-		TokenLeeway:          10 * time.Second,                   // 10 seconds leeway
-		CookieDuration:       7 * 24 * time.Hour,                 // 7 days cookie duration
-		Issuer:               "https://example.com",              // Replace with your issuer
-		IssuedAt:             time.Now().Unix(),                  // Time we issued the token, can be now or in the future
-		NotBefore:            time.Now().Unix(),                  // Time before which the token is not valid
-		Subject:              "test-user",                        // Replace with your subject,
+		SecretKey:            "your-super-secure-secret-key-here", // Replace with a secure key
+		TokenDuration:        5 * time.Hour,                       // 5 minute token duration
+		RefreshTokenDuration: 24 * 7 * time.Hour,                  // 7 day refresh token duration
+		TokenLeeway:          10 * time.Second,                    // 10 seconds leeway
+		CookieDuration:       7 * 24 * time.Hour,                  // 7 days cookie duration
+		Issuer:               "https://example.com",               // Replace with your issuer
+		IssuedAt:             time.Now().Unix(),                   // Time we issued the token, can be now or in the future
+		NotBefore:            time.Now().Unix(),                   // Time before which the token is not valid
+		Subject:              "testuser",                          // Replace with your subject,
 
 		// Custom claims if needed
 		CustomClaims: map[string]interface{}{
